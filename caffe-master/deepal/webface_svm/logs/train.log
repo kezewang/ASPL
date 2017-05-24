@@ -1,0 +1,2104 @@
+/media/wangkeze/ASPL/caffe-master/build/tools/caffe.bin: /home/wangkeze/anaconda2/lib/liblzma.so.5: no version information available (required by /usr/lib/x86_64-linux-gnu/libunwind.so.8)
+I0523 10:18:47.515290  2600 caffe.cpp:217] Using GPUs 0
+I0523 10:18:47.712682  2600 caffe.cpp:222] GPU 0: GeForce GTX 1080
+I0523 10:18:47.960613  2600 solver.cpp:48] Initializing solver from parameters: 
+test_iter: 143
+test_interval: 10000
+base_lr: 0.0001
+display: 10000
+max_iter: 80000
+lr_policy: "step"
+gamma: 0.1
+momentum: 0.9
+weight_decay: 0.0005
+stepsize: 60000
+snapshot: 20000
+snapshot_prefix: "webface_aspl"
+solver_mode: GPU
+device_id: 0
+net: "/media/wangkeze/ASPL/caffe-master/deepal/webface_svm/train_val_aspl.prototxt"
+train_state {
+  level: 0
+  stage: ""
+}
+I0523 10:18:47.979248  2600 solver.cpp:91] Creating training net from net file: /media/wangkeze/ASPL/caffe-master/deepal/webface_svm/train_val_aspl.prototxt
+I0523 10:18:48.013705  2600 net.cpp:322] The NetState phase (0) differed from the phase (1) specified by a rule in layer data
+I0523 10:18:48.013736  2600 net.cpp:322] The NetState phase (0) differed from the phase (1) specified by a rule in layer accuracy
+I0523 10:18:48.013860  2600 net.cpp:58] Initializing net from parameters: 
+name: "AlexNet"
+state {
+  phase: TRAIN
+  level: 0
+  stage: ""
+}
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    mirror: true
+    crop_size: 227
+    mean_file: "/media/wangkeze/ASPL/datasets/webface/webface_mean.binaryproto"
+  }
+  data_param {
+    source: "/media/wangkeze/ASPL/caffe-master/examples/imagenet/webface_finetune_lmdb"
+    batch_size: 128
+    backend: LMDB
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 11
+    stride: 4
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
+layer {
+  name: "norm1"
+  type: "LRN"
+  bottom: "conv1"
+  top: "norm1"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "norm1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 2
+    kernel_size: 5
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
+layer {
+  name: "norm2"
+  type: "LRN"
+  bottom: "conv2"
+  top: "norm2"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "norm2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "conv3"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu3"
+  type: "ReLU"
+  bottom: "conv3"
+  top: "conv3"
+}
+layer {
+  name: "conv4"
+  type: "Convolution"
+  bottom: "conv3"
+  top: "conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu4"
+  type: "ReLU"
+  bottom: "conv4"
+  top: "conv4"
+}
+layer {
+  name: "conv5"
+  type: "Convolution"
+  bottom: "conv4"
+  top: "conv5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu5"
+  type: "ReLU"
+  bottom: "conv5"
+  top: "conv5"
+}
+layer {
+  name: "pool5"
+  type: "Pooling"
+  bottom: "conv5"
+  top: "pool5"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "fc6"
+  type: "InnerProduct"
+  bottom: "pool5"
+  top: "fc6"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.005
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu6"
+  type: "ReLU"
+  bottom: "fc6"
+  top: "fc6"
+}
+layer {
+  name: "drop6"
+  type: "Dropout"
+  bottom: "fc6"
+  top: "fc6"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "fc7"
+  type: "InnerProduct"
+  bottom: "fc6"
+  top: "fc7"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.005
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu7"
+  type: "ReLU"
+  bottom: "fc7"
+  top: "fc7"
+}
+layer {
+  name: "drop7"
+  type: "Dropout"
+  bottom: "fc7"
+  top: "fc7"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "fc8_sun2"
+  type: "InnerProduct"
+  bottom: "fc7"
+  top: "fc8_sun2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 925
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "fc8_sun2"
+  bottom: "label"
+  top: "loss"
+}
+I0523 10:18:48.013959  2600 layer_factory.hpp:77] Creating layer data
+I0523 10:18:48.023859  2600 net.cpp:100] Creating Layer data
+I0523 10:18:48.023902  2600 net.cpp:408] data -> data
+I0523 10:18:48.023922  2600 net.cpp:408] data -> label
+I0523 10:18:48.023946  2600 data_transformer.cpp:25] Loading mean file from: /media/wangkeze/ASPL/datasets/webface/webface_mean.binaryproto
+I0523 10:18:48.024523  2607 db_lmdb.cpp:35] Opened lmdb /media/wangkeze/ASPL/caffe-master/examples/imagenet/webface_finetune_lmdb
+I0523 10:18:48.049669  2600 data_layer.cpp:41] output data size: 128,3,227,227
+I0523 10:18:48.134688  2600 net.cpp:150] Setting up data
+I0523 10:18:48.134723  2600 net.cpp:157] Top shape: 128 3 227 227 (19787136)
+I0523 10:18:48.134730  2600 net.cpp:157] Top shape: 128 (128)
+I0523 10:18:48.134734  2600 net.cpp:165] Memory required for data: 79149056
+I0523 10:18:48.134744  2600 layer_factory.hpp:77] Creating layer conv1
+I0523 10:18:48.134764  2600 net.cpp:100] Creating Layer conv1
+I0523 10:18:48.134771  2600 net.cpp:434] conv1 <- data
+I0523 10:18:48.134784  2600 net.cpp:408] conv1 -> conv1
+I0523 10:18:48.164075  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:18:48.473132  2600 net.cpp:150] Setting up conv1
+I0523 10:18:48.473160  2600 net.cpp:157] Top shape: 128 96 55 55 (37171200)
+I0523 10:18:48.473166  2600 net.cpp:165] Memory required for data: 227833856
+I0523 10:18:48.473201  2600 layer_factory.hpp:77] Creating layer relu1
+I0523 10:18:48.473232  2600 net.cpp:100] Creating Layer relu1
+I0523 10:18:48.473258  2600 net.cpp:434] relu1 <- conv1
+I0523 10:18:48.473278  2600 net.cpp:395] relu1 -> conv1 (in-place)
+I0523 10:18:48.473471  2600 net.cpp:150] Setting up relu1
+I0523 10:18:48.473481  2600 net.cpp:157] Top shape: 128 96 55 55 (37171200)
+I0523 10:18:48.473495  2600 net.cpp:165] Memory required for data: 376518656
+I0523 10:18:48.473500  2600 layer_factory.hpp:77] Creating layer norm1
+I0523 10:18:48.473520  2600 net.cpp:100] Creating Layer norm1
+I0523 10:18:48.473525  2600 net.cpp:434] norm1 <- conv1
+I0523 10:18:48.473531  2600 net.cpp:408] norm1 -> norm1
+I0523 10:18:48.474059  2600 net.cpp:150] Setting up norm1
+I0523 10:18:48.474092  2600 net.cpp:157] Top shape: 128 96 55 55 (37171200)
+I0523 10:18:48.474128  2600 net.cpp:165] Memory required for data: 525203456
+I0523 10:18:48.474133  2600 layer_factory.hpp:77] Creating layer pool1
+I0523 10:18:48.474150  2600 net.cpp:100] Creating Layer pool1
+I0523 10:18:48.474165  2600 net.cpp:434] pool1 <- norm1
+I0523 10:18:48.474171  2600 net.cpp:408] pool1 -> pool1
+I0523 10:18:48.474234  2600 net.cpp:150] Setting up pool1
+I0523 10:18:48.474241  2600 net.cpp:157] Top shape: 128 96 27 27 (8957952)
+I0523 10:18:48.474256  2600 net.cpp:165] Memory required for data: 561035264
+I0523 10:18:48.474261  2600 layer_factory.hpp:77] Creating layer conv2
+I0523 10:18:48.474282  2600 net.cpp:100] Creating Layer conv2
+I0523 10:18:48.474298  2600 net.cpp:434] conv2 <- pool1
+I0523 10:18:48.474303  2600 net.cpp:408] conv2 -> conv2
+I0523 10:18:48.485633  2600 net.cpp:150] Setting up conv2
+I0523 10:18:48.485652  2600 net.cpp:157] Top shape: 128 256 27 27 (23887872)
+I0523 10:18:48.485656  2600 net.cpp:165] Memory required for data: 656586752
+I0523 10:18:48.485667  2600 layer_factory.hpp:77] Creating layer relu2
+I0523 10:18:48.485677  2600 net.cpp:100] Creating Layer relu2
+I0523 10:18:48.485684  2600 net.cpp:434] relu2 <- conv2
+I0523 10:18:48.485695  2600 net.cpp:395] relu2 -> conv2 (in-place)
+I0523 10:18:48.486253  2600 net.cpp:150] Setting up relu2
+I0523 10:18:48.486265  2600 net.cpp:157] Top shape: 128 256 27 27 (23887872)
+I0523 10:18:48.486269  2600 net.cpp:165] Memory required for data: 752138240
+I0523 10:18:48.486274  2600 layer_factory.hpp:77] Creating layer norm2
+I0523 10:18:48.486281  2600 net.cpp:100] Creating Layer norm2
+I0523 10:18:48.486287  2600 net.cpp:434] norm2 <- conv2
+I0523 10:18:48.486296  2600 net.cpp:408] norm2 -> norm2
+I0523 10:18:48.486428  2600 net.cpp:150] Setting up norm2
+I0523 10:18:48.486436  2600 net.cpp:157] Top shape: 128 256 27 27 (23887872)
+I0523 10:18:48.486441  2600 net.cpp:165] Memory required for data: 847689728
+I0523 10:18:48.486445  2600 layer_factory.hpp:77] Creating layer pool2
+I0523 10:18:48.486454  2600 net.cpp:100] Creating Layer pool2
+I0523 10:18:48.486459  2600 net.cpp:434] pool2 <- norm2
+I0523 10:18:48.486464  2600 net.cpp:408] pool2 -> pool2
+I0523 10:18:48.486490  2600 net.cpp:150] Setting up pool2
+I0523 10:18:48.486495  2600 net.cpp:157] Top shape: 128 256 13 13 (5537792)
+I0523 10:18:48.486500  2600 net.cpp:165] Memory required for data: 869840896
+I0523 10:18:48.486505  2600 layer_factory.hpp:77] Creating layer conv3
+I0523 10:18:48.486515  2600 net.cpp:100] Creating Layer conv3
+I0523 10:18:48.486518  2600 net.cpp:434] conv3 <- pool2
+I0523 10:18:48.486524  2600 net.cpp:408] conv3 -> conv3
+I0523 10:18:48.506875  2600 net.cpp:150] Setting up conv3
+I0523 10:18:48.506896  2600 net.cpp:157] Top shape: 128 384 13 13 (8306688)
+I0523 10:18:48.506901  2600 net.cpp:165] Memory required for data: 903067648
+I0523 10:18:48.506912  2600 layer_factory.hpp:77] Creating layer relu3
+I0523 10:18:48.506922  2600 net.cpp:100] Creating Layer relu3
+I0523 10:18:48.506927  2600 net.cpp:434] relu3 <- conv3
+I0523 10:18:48.506933  2600 net.cpp:395] relu3 -> conv3 (in-place)
+I0523 10:18:48.507060  2600 net.cpp:150] Setting up relu3
+I0523 10:18:48.507068  2600 net.cpp:157] Top shape: 128 384 13 13 (8306688)
+I0523 10:18:48.507072  2600 net.cpp:165] Memory required for data: 936294400
+I0523 10:18:48.507077  2600 layer_factory.hpp:77] Creating layer conv4
+I0523 10:18:48.507097  2600 net.cpp:100] Creating Layer conv4
+I0523 10:18:48.507102  2600 net.cpp:434] conv4 <- conv3
+I0523 10:18:48.507107  2600 net.cpp:408] conv4 -> conv4
+I0523 10:18:48.523375  2600 net.cpp:150] Setting up conv4
+I0523 10:18:48.523396  2600 net.cpp:157] Top shape: 128 384 13 13 (8306688)
+I0523 10:18:48.523399  2600 net.cpp:165] Memory required for data: 969521152
+I0523 10:18:48.523411  2600 layer_factory.hpp:77] Creating layer relu4
+I0523 10:18:48.523433  2600 net.cpp:100] Creating Layer relu4
+I0523 10:18:48.523453  2600 net.cpp:434] relu4 <- conv4
+I0523 10:18:48.523478  2600 net.cpp:395] relu4 -> conv4 (in-place)
+I0523 10:18:48.523689  2600 net.cpp:150] Setting up relu4
+I0523 10:18:48.523710  2600 net.cpp:157] Top shape: 128 384 13 13 (8306688)
+I0523 10:18:48.523713  2600 net.cpp:165] Memory required for data: 1002747904
+I0523 10:18:48.523718  2600 layer_factory.hpp:77] Creating layer conv5
+I0523 10:18:48.523732  2600 net.cpp:100] Creating Layer conv5
+I0523 10:18:48.523738  2600 net.cpp:434] conv5 <- conv4
+I0523 10:18:48.523744  2600 net.cpp:408] conv5 -> conv5
+I0523 10:18:48.535182  2600 net.cpp:150] Setting up conv5
+I0523 10:18:48.535200  2600 net.cpp:157] Top shape: 128 256 13 13 (5537792)
+I0523 10:18:48.535205  2600 net.cpp:165] Memory required for data: 1024899072
+I0523 10:18:48.535217  2600 layer_factory.hpp:77] Creating layer relu5
+I0523 10:18:48.535225  2600 net.cpp:100] Creating Layer relu5
+I0523 10:18:48.535231  2600 net.cpp:434] relu5 <- conv5
+I0523 10:18:48.535238  2600 net.cpp:395] relu5 -> conv5 (in-place)
+I0523 10:18:48.535367  2600 net.cpp:150] Setting up relu5
+I0523 10:18:48.535377  2600 net.cpp:157] Top shape: 128 256 13 13 (5537792)
+I0523 10:18:48.535380  2600 net.cpp:165] Memory required for data: 1047050240
+I0523 10:18:48.535384  2600 layer_factory.hpp:77] Creating layer pool5
+I0523 10:18:48.535393  2600 net.cpp:100] Creating Layer pool5
+I0523 10:18:48.535398  2600 net.cpp:434] pool5 <- conv5
+I0523 10:18:48.535404  2600 net.cpp:408] pool5 -> pool5
+I0523 10:18:48.535439  2600 net.cpp:150] Setting up pool5
+I0523 10:18:48.535446  2600 net.cpp:157] Top shape: 128 256 6 6 (1179648)
+I0523 10:18:48.535450  2600 net.cpp:165] Memory required for data: 1051768832
+I0523 10:18:48.535454  2600 layer_factory.hpp:77] Creating layer fc6
+I0523 10:18:48.535466  2600 net.cpp:100] Creating Layer fc6
+I0523 10:18:48.535471  2600 net.cpp:434] fc6 <- pool5
+I0523 10:18:48.535477  2600 net.cpp:408] fc6 -> fc6
+I0523 10:18:49.282052  2600 net.cpp:150] Setting up fc6
+I0523 10:18:49.282078  2600 net.cpp:157] Top shape: 128 4096 (524288)
+I0523 10:18:49.282083  2600 net.cpp:165] Memory required for data: 1053865984
+I0523 10:18:49.282091  2600 layer_factory.hpp:77] Creating layer relu6
+I0523 10:18:49.282111  2600 net.cpp:100] Creating Layer relu6
+I0523 10:18:49.282119  2600 net.cpp:434] relu6 <- fc6
+I0523 10:18:49.282126  2600 net.cpp:395] relu6 -> fc6 (in-place)
+I0523 10:18:49.282739  2600 net.cpp:150] Setting up relu6
+I0523 10:18:49.282750  2600 net.cpp:157] Top shape: 128 4096 (524288)
+I0523 10:18:49.282757  2600 net.cpp:165] Memory required for data: 1055963136
+I0523 10:18:49.282762  2600 layer_factory.hpp:77] Creating layer drop6
+I0523 10:18:49.282768  2600 net.cpp:100] Creating Layer drop6
+I0523 10:18:49.282783  2600 net.cpp:434] drop6 <- fc6
+I0523 10:18:49.282789  2600 net.cpp:395] drop6 -> fc6 (in-place)
+I0523 10:18:49.282810  2600 net.cpp:150] Setting up drop6
+I0523 10:18:49.282826  2600 net.cpp:157] Top shape: 128 4096 (524288)
+I0523 10:18:49.282830  2600 net.cpp:165] Memory required for data: 1058060288
+I0523 10:18:49.282835  2600 layer_factory.hpp:77] Creating layer fc7
+I0523 10:18:49.282842  2600 net.cpp:100] Creating Layer fc7
+I0523 10:18:49.282847  2600 net.cpp:434] fc7 <- fc6
+I0523 10:18:49.282866  2600 net.cpp:408] fc7 -> fc7
+I0523 10:18:49.606449  2600 net.cpp:150] Setting up fc7
+I0523 10:18:49.606477  2600 net.cpp:157] Top shape: 128 4096 (524288)
+I0523 10:18:49.606482  2600 net.cpp:165] Memory required for data: 1060157440
+I0523 10:18:49.606492  2600 layer_factory.hpp:77] Creating layer relu7
+I0523 10:18:49.606511  2600 net.cpp:100] Creating Layer relu7
+I0523 10:18:49.606516  2600 net.cpp:434] relu7 <- fc7
+I0523 10:18:49.606524  2600 net.cpp:395] relu7 -> fc7 (in-place)
+I0523 10:18:49.606701  2600 net.cpp:150] Setting up relu7
+I0523 10:18:49.606710  2600 net.cpp:157] Top shape: 128 4096 (524288)
+I0523 10:18:49.606714  2600 net.cpp:165] Memory required for data: 1062254592
+I0523 10:18:49.606719  2600 layer_factory.hpp:77] Creating layer drop7
+I0523 10:18:49.606727  2600 net.cpp:100] Creating Layer drop7
+I0523 10:18:49.606741  2600 net.cpp:434] drop7 <- fc7
+I0523 10:18:49.606746  2600 net.cpp:395] drop7 -> fc7 (in-place)
+I0523 10:18:49.606765  2600 net.cpp:150] Setting up drop7
+I0523 10:18:49.606792  2600 net.cpp:157] Top shape: 128 4096 (524288)
+I0523 10:18:49.606796  2600 net.cpp:165] Memory required for data: 1064351744
+I0523 10:18:49.606801  2600 layer_factory.hpp:77] Creating layer fc8_sun2
+I0523 10:18:49.606808  2600 net.cpp:100] Creating Layer fc8_sun2
+I0523 10:18:49.606812  2600 net.cpp:434] fc8_sun2 <- fc7
+I0523 10:18:49.606830  2600 net.cpp:408] fc8_sun2 -> fc8_sun2
+I0523 10:18:49.680169  2600 net.cpp:150] Setting up fc8_sun2
+I0523 10:18:49.680197  2600 net.cpp:157] Top shape: 128 925 (118400)
+I0523 10:18:49.680200  2600 net.cpp:165] Memory required for data: 1064825344
+I0523 10:18:49.680209  2600 layer_factory.hpp:77] Creating layer loss
+I0523 10:18:49.680228  2600 net.cpp:100] Creating Layer loss
+I0523 10:18:49.680234  2600 net.cpp:434] loss <- fc8_sun2
+I0523 10:18:49.680240  2600 net.cpp:434] loss <- label
+I0523 10:18:49.680248  2600 net.cpp:408] loss -> loss
+I0523 10:18:49.680260  2600 layer_factory.hpp:77] Creating layer loss
+I0523 10:18:49.681205  2600 net.cpp:150] Setting up loss
+I0523 10:18:49.681217  2600 net.cpp:157] Top shape: (1)
+I0523 10:18:49.681221  2600 net.cpp:160]     with loss weight 1
+I0523 10:18:49.681234  2600 net.cpp:165] Memory required for data: 1064825348
+I0523 10:18:49.681249  2600 net.cpp:226] loss needs backward computation.
+I0523 10:18:49.681257  2600 net.cpp:226] fc8_sun2 needs backward computation.
+I0523 10:18:49.681260  2600 net.cpp:226] drop7 needs backward computation.
+I0523 10:18:49.681265  2600 net.cpp:226] relu7 needs backward computation.
+I0523 10:18:49.681269  2600 net.cpp:226] fc7 needs backward computation.
+I0523 10:18:49.681273  2600 net.cpp:226] drop6 needs backward computation.
+I0523 10:18:49.681278  2600 net.cpp:226] relu6 needs backward computation.
+I0523 10:18:49.681282  2600 net.cpp:226] fc6 needs backward computation.
+I0523 10:18:49.681288  2600 net.cpp:226] pool5 needs backward computation.
+I0523 10:18:49.681291  2600 net.cpp:226] relu5 needs backward computation.
+I0523 10:18:49.681298  2600 net.cpp:226] conv5 needs backward computation.
+I0523 10:18:49.681303  2600 net.cpp:226] relu4 needs backward computation.
+I0523 10:18:49.681306  2600 net.cpp:226] conv4 needs backward computation.
+I0523 10:18:49.681313  2600 net.cpp:226] relu3 needs backward computation.
+I0523 10:18:49.681318  2600 net.cpp:226] conv3 needs backward computation.
+I0523 10:18:49.681324  2600 net.cpp:226] pool2 needs backward computation.
+I0523 10:18:49.681329  2600 net.cpp:226] norm2 needs backward computation.
+I0523 10:18:49.681332  2600 net.cpp:226] relu2 needs backward computation.
+I0523 10:18:49.681336  2600 net.cpp:226] conv2 needs backward computation.
+I0523 10:18:49.681342  2600 net.cpp:226] pool1 needs backward computation.
+I0523 10:18:49.681346  2600 net.cpp:226] norm1 needs backward computation.
+I0523 10:18:49.681351  2600 net.cpp:226] relu1 needs backward computation.
+I0523 10:18:49.681355  2600 net.cpp:226] conv1 needs backward computation.
+I0523 10:18:49.681360  2600 net.cpp:228] data does not need backward computation.
+I0523 10:18:49.681365  2600 net.cpp:270] This network produces output loss
+I0523 10:18:49.681378  2600 net.cpp:283] Network initialization done.
+I0523 10:18:49.681810  2600 solver.cpp:181] Creating test net (#0) specified by net file: /media/wangkeze/ASPL/caffe-master/deepal/webface_svm/train_val_aspl.prototxt
+I0523 10:18:49.681841  2600 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer data
+I0523 10:18:49.681963  2600 net.cpp:58] Initializing net from parameters: 
+name: "AlexNet"
+state {
+  phase: TEST
+}
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    mirror: false
+    crop_size: 227
+    mean_file: "/media/wangkeze/ASPL/datasets/webface/webface_mean.binaryproto"
+  }
+  data_param {
+    source: "/media/wangkeze/ASPL/caffe-master/examples/imagenet/webface_test_lmdb"
+    batch_size: 256
+    backend: LMDB
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 11
+    stride: 4
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
+layer {
+  name: "norm1"
+  type: "LRN"
+  bottom: "conv1"
+  top: "norm1"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "norm1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 2
+    kernel_size: 5
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
+layer {
+  name: "norm2"
+  type: "LRN"
+  bottom: "conv2"
+  top: "norm2"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "norm2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "conv3"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "relu3"
+  type: "ReLU"
+  bottom: "conv3"
+  top: "conv3"
+}
+layer {
+  name: "conv4"
+  type: "Convolution"
+  bottom: "conv3"
+  top: "conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu4"
+  type: "ReLU"
+  bottom: "conv4"
+  top: "conv4"
+}
+layer {
+  name: "conv5"
+  type: "Convolution"
+  bottom: "conv4"
+  top: "conv5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu5"
+  type: "ReLU"
+  bottom: "conv5"
+  top: "conv5"
+}
+layer {
+  name: "pool5"
+  type: "Pooling"
+  bottom: "conv5"
+  top: "pool5"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "fc6"
+  type: "InnerProduct"
+  bottom: "pool5"
+  top: "fc6"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.005
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu6"
+  type: "ReLU"
+  bottom: "fc6"
+  top: "fc6"
+}
+layer {
+  name: "drop6"
+  type: "Dropout"
+  bottom: "fc6"
+  top: "fc6"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "fc7"
+  type: "InnerProduct"
+  bottom: "fc6"
+  top: "fc7"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.005
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "relu7"
+  type: "ReLU"
+  bottom: "fc7"
+  top: "fc7"
+}
+layer {
+  name: "drop7"
+  type: "Dropout"
+  bottom: "fc7"
+  top: "fc7"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "fc8_sun2"
+  type: "InnerProduct"
+  bottom: "fc7"
+  top: "fc8_sun2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 925
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "fc8_sun2"
+  bottom: "label"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "fc8_sun2"
+  bottom: "label"
+  top: "loss"
+}
+I0523 10:18:49.682055  2600 layer_factory.hpp:77] Creating layer data
+I0523 10:18:49.682207  2600 net.cpp:100] Creating Layer data
+I0523 10:18:49.682215  2600 net.cpp:408] data -> data
+I0523 10:18:49.682224  2600 net.cpp:408] data -> label
+I0523 10:18:49.682230  2600 data_transformer.cpp:25] Loading mean file from: /media/wangkeze/ASPL/datasets/webface/webface_mean.binaryproto
+I0523 10:18:49.695025  2609 db_lmdb.cpp:35] Opened lmdb /media/wangkeze/ASPL/caffe-master/examples/imagenet/webface_test_lmdb
+I0523 10:18:49.712265  2600 data_layer.cpp:41] output data size: 256,3,227,227
+I0523 10:18:49.882633  2600 net.cpp:150] Setting up data
+I0523 10:18:49.882654  2600 net.cpp:157] Top shape: 256 3 227 227 (39574272)
+I0523 10:18:49.882661  2600 net.cpp:157] Top shape: 256 (256)
+I0523 10:18:49.882676  2600 net.cpp:165] Memory required for data: 158298112
+I0523 10:18:49.882683  2600 layer_factory.hpp:77] Creating layer label_data_1_split
+I0523 10:18:49.882696  2600 net.cpp:100] Creating Layer label_data_1_split
+I0523 10:18:49.882704  2600 net.cpp:434] label_data_1_split <- label
+I0523 10:18:49.882711  2600 net.cpp:408] label_data_1_split -> label_data_1_split_0
+I0523 10:18:49.882720  2600 net.cpp:408] label_data_1_split -> label_data_1_split_1
+I0523 10:18:49.882828  2600 net.cpp:150] Setting up label_data_1_split
+I0523 10:18:49.882843  2600 net.cpp:157] Top shape: 256 (256)
+I0523 10:18:49.882848  2600 net.cpp:157] Top shape: 256 (256)
+I0523 10:18:49.882864  2600 net.cpp:165] Memory required for data: 158300160
+I0523 10:18:49.882869  2600 layer_factory.hpp:77] Creating layer conv1
+I0523 10:18:49.882884  2600 net.cpp:100] Creating Layer conv1
+I0523 10:18:49.882889  2600 net.cpp:434] conv1 <- data
+I0523 10:18:49.882896  2600 net.cpp:408] conv1 -> conv1
+I0523 10:18:49.897088  2600 net.cpp:150] Setting up conv1
+I0523 10:18:49.897109  2600 net.cpp:157] Top shape: 256 96 55 55 (74342400)
+I0523 10:18:49.897114  2600 net.cpp:165] Memory required for data: 455669760
+I0523 10:18:49.897135  2600 layer_factory.hpp:77] Creating layer relu1
+I0523 10:18:49.897146  2600 net.cpp:100] Creating Layer relu1
+I0523 10:18:49.897153  2600 net.cpp:434] relu1 <- conv1
+I0523 10:18:49.897161  2600 net.cpp:395] relu1 -> conv1 (in-place)
+I0523 10:18:49.897294  2600 net.cpp:150] Setting up relu1
+I0523 10:18:49.897302  2600 net.cpp:157] Top shape: 256 96 55 55 (74342400)
+I0523 10:18:49.897307  2600 net.cpp:165] Memory required for data: 753039360
+I0523 10:18:49.897321  2600 layer_factory.hpp:77] Creating layer norm1
+I0523 10:18:49.897331  2600 net.cpp:100] Creating Layer norm1
+I0523 10:18:49.897336  2600 net.cpp:434] norm1 <- conv1
+I0523 10:18:49.897341  2600 net.cpp:408] norm1 -> norm1
+I0523 10:18:49.897959  2600 net.cpp:150] Setting up norm1
+I0523 10:18:49.897974  2600 net.cpp:157] Top shape: 256 96 55 55 (74342400)
+I0523 10:18:49.897977  2600 net.cpp:165] Memory required for data: 1050408960
+I0523 10:18:49.897994  2600 layer_factory.hpp:77] Creating layer pool1
+I0523 10:18:49.898001  2600 net.cpp:100] Creating Layer pool1
+I0523 10:18:49.898007  2600 net.cpp:434] pool1 <- norm1
+I0523 10:18:49.898013  2600 net.cpp:408] pool1 -> pool1
+I0523 10:18:49.898057  2600 net.cpp:150] Setting up pool1
+I0523 10:18:49.898064  2600 net.cpp:157] Top shape: 256 96 27 27 (17915904)
+I0523 10:18:49.898068  2600 net.cpp:165] Memory required for data: 1122072576
+I0523 10:18:49.898084  2600 layer_factory.hpp:77] Creating layer conv2
+I0523 10:18:49.898094  2600 net.cpp:100] Creating Layer conv2
+I0523 10:18:49.898099  2600 net.cpp:434] conv2 <- pool1
+I0523 10:18:49.898105  2600 net.cpp:408] conv2 -> conv2
+I0523 10:18:49.906190  2600 net.cpp:150] Setting up conv2
+I0523 10:18:49.906213  2600 net.cpp:157] Top shape: 256 256 27 27 (47775744)
+I0523 10:18:49.906219  2600 net.cpp:165] Memory required for data: 1313175552
+I0523 10:18:49.906230  2600 layer_factory.hpp:77] Creating layer relu2
+I0523 10:18:49.906244  2600 net.cpp:100] Creating Layer relu2
+I0523 10:18:49.906261  2600 net.cpp:434] relu2 <- conv2
+I0523 10:18:49.906277  2600 net.cpp:395] relu2 -> conv2 (in-place)
+I0523 10:18:49.906828  2600 net.cpp:150] Setting up relu2
+I0523 10:18:49.906842  2600 net.cpp:157] Top shape: 256 256 27 27 (47775744)
+I0523 10:18:49.906847  2600 net.cpp:165] Memory required for data: 1504278528
+I0523 10:18:49.906852  2600 layer_factory.hpp:77] Creating layer norm2
+I0523 10:18:49.906862  2600 net.cpp:100] Creating Layer norm2
+I0523 10:18:49.906868  2600 net.cpp:434] norm2 <- conv2
+I0523 10:18:49.906875  2600 net.cpp:408] norm2 -> norm2
+I0523 10:18:49.907033  2600 net.cpp:150] Setting up norm2
+I0523 10:18:49.907042  2600 net.cpp:157] Top shape: 256 256 27 27 (47775744)
+I0523 10:18:49.907047  2600 net.cpp:165] Memory required for data: 1695381504
+I0523 10:18:49.907063  2600 layer_factory.hpp:77] Creating layer pool2
+I0523 10:18:49.907071  2600 net.cpp:100] Creating Layer pool2
+I0523 10:18:49.907078  2600 net.cpp:434] pool2 <- norm2
+I0523 10:18:49.907084  2600 net.cpp:408] pool2 -> pool2
+I0523 10:18:49.907124  2600 net.cpp:150] Setting up pool2
+I0523 10:18:49.907130  2600 net.cpp:157] Top shape: 256 256 13 13 (11075584)
+I0523 10:18:49.907133  2600 net.cpp:165] Memory required for data: 1739683840
+I0523 10:18:49.907148  2600 layer_factory.hpp:77] Creating layer conv3
+I0523 10:18:49.907160  2600 net.cpp:100] Creating Layer conv3
+I0523 10:18:49.907166  2600 net.cpp:434] conv3 <- pool2
+I0523 10:18:49.907172  2600 net.cpp:408] conv3 -> conv3
+I0523 10:18:49.927549  2600 net.cpp:150] Setting up conv3
+I0523 10:18:49.927577  2600 net.cpp:157] Top shape: 256 384 13 13 (16613376)
+I0523 10:18:49.927582  2600 net.cpp:165] Memory required for data: 1806137344
+I0523 10:18:49.927608  2600 layer_factory.hpp:77] Creating layer relu3
+I0523 10:18:49.927619  2600 net.cpp:100] Creating Layer relu3
+I0523 10:18:49.927628  2600 net.cpp:434] relu3 <- conv3
+I0523 10:18:49.927635  2600 net.cpp:395] relu3 -> conv3 (in-place)
+I0523 10:18:49.927793  2600 net.cpp:150] Setting up relu3
+I0523 10:18:49.927804  2600 net.cpp:157] Top shape: 256 384 13 13 (16613376)
+I0523 10:18:49.927809  2600 net.cpp:165] Memory required for data: 1872590848
+I0523 10:18:49.927824  2600 layer_factory.hpp:77] Creating layer conv4
+I0523 10:18:49.927835  2600 net.cpp:100] Creating Layer conv4
+I0523 10:18:49.927842  2600 net.cpp:434] conv4 <- conv3
+I0523 10:18:49.927848  2600 net.cpp:408] conv4 -> conv4
+I0523 10:18:49.944299  2600 net.cpp:150] Setting up conv4
+I0523 10:18:49.944324  2600 net.cpp:157] Top shape: 256 384 13 13 (16613376)
+I0523 10:18:49.944329  2600 net.cpp:165] Memory required for data: 1939044352
+I0523 10:18:49.944350  2600 layer_factory.hpp:77] Creating layer relu4
+I0523 10:18:49.944360  2600 net.cpp:100] Creating Layer relu4
+I0523 10:18:49.944367  2600 net.cpp:434] relu4 <- conv4
+I0523 10:18:49.944375  2600 net.cpp:395] relu4 -> conv4 (in-place)
+I0523 10:18:49.944533  2600 net.cpp:150] Setting up relu4
+I0523 10:18:49.944542  2600 net.cpp:157] Top shape: 256 384 13 13 (16613376)
+I0523 10:18:49.944547  2600 net.cpp:165] Memory required for data: 2005497856
+I0523 10:18:49.944551  2600 layer_factory.hpp:77] Creating layer conv5
+I0523 10:18:49.944574  2600 net.cpp:100] Creating Layer conv5
+I0523 10:18:49.944581  2600 net.cpp:434] conv5 <- conv4
+I0523 10:18:49.944586  2600 net.cpp:408] conv5 -> conv5
+I0523 10:18:49.956377  2600 net.cpp:150] Setting up conv5
+I0523 10:18:49.956401  2600 net.cpp:157] Top shape: 256 256 13 13 (11075584)
+I0523 10:18:49.956408  2600 net.cpp:165] Memory required for data: 2049800192
+I0523 10:18:49.956440  2600 layer_factory.hpp:77] Creating layer relu5
+I0523 10:18:49.956450  2600 net.cpp:100] Creating Layer relu5
+I0523 10:18:49.956459  2600 net.cpp:434] relu5 <- conv5
+I0523 10:18:49.956490  2600 net.cpp:395] relu5 -> conv5 (in-place)
+I0523 10:18:49.956653  2600 net.cpp:150] Setting up relu5
+I0523 10:18:49.956662  2600 net.cpp:157] Top shape: 256 256 13 13 (11075584)
+I0523 10:18:49.956666  2600 net.cpp:165] Memory required for data: 2094102528
+I0523 10:18:49.956681  2600 layer_factory.hpp:77] Creating layer pool5
+I0523 10:18:49.956691  2600 net.cpp:100] Creating Layer pool5
+I0523 10:18:49.956697  2600 net.cpp:434] pool5 <- conv5
+I0523 10:18:49.956702  2600 net.cpp:408] pool5 -> pool5
+I0523 10:18:49.956758  2600 net.cpp:150] Setting up pool5
+I0523 10:18:49.956766  2600 net.cpp:157] Top shape: 256 256 6 6 (2359296)
+I0523 10:18:49.956770  2600 net.cpp:165] Memory required for data: 2103539712
+I0523 10:18:49.956784  2600 layer_factory.hpp:77] Creating layer fc6
+I0523 10:18:49.956794  2600 net.cpp:100] Creating Layer fc6
+I0523 10:18:49.956799  2600 net.cpp:434] fc6 <- pool5
+I0523 10:18:49.956804  2600 net.cpp:408] fc6 -> fc6
+I0523 10:18:50.703064  2600 net.cpp:150] Setting up fc6
+I0523 10:18:50.703094  2600 net.cpp:157] Top shape: 256 4096 (1048576)
+I0523 10:18:50.703099  2600 net.cpp:165] Memory required for data: 2107734016
+I0523 10:18:50.703109  2600 layer_factory.hpp:77] Creating layer relu6
+I0523 10:18:50.703130  2600 net.cpp:100] Creating Layer relu6
+I0523 10:18:50.703137  2600 net.cpp:434] relu6 <- fc6
+I0523 10:18:50.703145  2600 net.cpp:395] relu6 -> fc6 (in-place)
+I0523 10:18:50.703342  2600 net.cpp:150] Setting up relu6
+I0523 10:18:50.703352  2600 net.cpp:157] Top shape: 256 4096 (1048576)
+I0523 10:18:50.703356  2600 net.cpp:165] Memory required for data: 2111928320
+I0523 10:18:50.703361  2600 layer_factory.hpp:77] Creating layer drop6
+I0523 10:18:50.703369  2600 net.cpp:100] Creating Layer drop6
+I0523 10:18:50.703373  2600 net.cpp:434] drop6 <- fc6
+I0523 10:18:50.703388  2600 net.cpp:395] drop6 -> fc6 (in-place)
+I0523 10:18:50.703413  2600 net.cpp:150] Setting up drop6
+I0523 10:18:50.703428  2600 net.cpp:157] Top shape: 256 4096 (1048576)
+I0523 10:18:50.703431  2600 net.cpp:165] Memory required for data: 2116122624
+I0523 10:18:50.703435  2600 layer_factory.hpp:77] Creating layer fc7
+I0523 10:18:50.703444  2600 net.cpp:100] Creating Layer fc7
+I0523 10:18:50.703449  2600 net.cpp:434] fc7 <- fc6
+I0523 10:18:50.703466  2600 net.cpp:408] fc7 -> fc7
+I0523 10:18:51.026554  2600 net.cpp:150] Setting up fc7
+I0523 10:18:51.026581  2600 net.cpp:157] Top shape: 256 4096 (1048576)
+I0523 10:18:51.026584  2600 net.cpp:165] Memory required for data: 2120316928
+I0523 10:18:51.026593  2600 layer_factory.hpp:77] Creating layer relu7
+I0523 10:18:51.026613  2600 net.cpp:100] Creating Layer relu7
+I0523 10:18:51.026619  2600 net.cpp:434] relu7 <- fc7
+I0523 10:18:51.026626  2600 net.cpp:395] relu7 -> fc7 (in-place)
+I0523 10:18:51.027257  2600 net.cpp:150] Setting up relu7
+I0523 10:18:51.027269  2600 net.cpp:157] Top shape: 256 4096 (1048576)
+I0523 10:18:51.027274  2600 net.cpp:165] Memory required for data: 2124511232
+I0523 10:18:51.027278  2600 layer_factory.hpp:77] Creating layer drop7
+I0523 10:18:51.027284  2600 net.cpp:100] Creating Layer drop7
+I0523 10:18:51.027299  2600 net.cpp:434] drop7 <- fc7
+I0523 10:18:51.027305  2600 net.cpp:395] drop7 -> fc7 (in-place)
+I0523 10:18:51.027339  2600 net.cpp:150] Setting up drop7
+I0523 10:18:51.027354  2600 net.cpp:157] Top shape: 256 4096 (1048576)
+I0523 10:18:51.027359  2600 net.cpp:165] Memory required for data: 2128705536
+I0523 10:18:51.027372  2600 layer_factory.hpp:77] Creating layer fc8_sun2
+I0523 10:18:51.027379  2600 net.cpp:100] Creating Layer fc8_sun2
+I0523 10:18:51.027395  2600 net.cpp:434] fc8_sun2 <- fc7
+I0523 10:18:51.027410  2600 net.cpp:408] fc8_sun2 -> fc8_sun2
+I0523 10:18:51.100956  2600 net.cpp:150] Setting up fc8_sun2
+I0523 10:18:51.100983  2600 net.cpp:157] Top shape: 256 925 (236800)
+I0523 10:18:51.101006  2600 net.cpp:165] Memory required for data: 2129652736
+I0523 10:18:51.101014  2600 layer_factory.hpp:77] Creating layer fc8_sun2_fc8_sun2_0_split
+I0523 10:18:51.101033  2600 net.cpp:100] Creating Layer fc8_sun2_fc8_sun2_0_split
+I0523 10:18:51.101052  2600 net.cpp:434] fc8_sun2_fc8_sun2_0_split <- fc8_sun2
+I0523 10:18:51.101059  2600 net.cpp:408] fc8_sun2_fc8_sun2_0_split -> fc8_sun2_fc8_sun2_0_split_0
+I0523 10:18:51.101068  2600 net.cpp:408] fc8_sun2_fc8_sun2_0_split -> fc8_sun2_fc8_sun2_0_split_1
+I0523 10:18:51.101102  2600 net.cpp:150] Setting up fc8_sun2_fc8_sun2_0_split
+I0523 10:18:51.101109  2600 net.cpp:157] Top shape: 256 925 (236800)
+I0523 10:18:51.101114  2600 net.cpp:157] Top shape: 256 925 (236800)
+I0523 10:18:51.101119  2600 net.cpp:165] Memory required for data: 2131547136
+I0523 10:18:51.101124  2600 layer_factory.hpp:77] Creating layer accuracy
+I0523 10:18:51.101130  2600 net.cpp:100] Creating Layer accuracy
+I0523 10:18:51.101135  2600 net.cpp:434] accuracy <- fc8_sun2_fc8_sun2_0_split_0
+I0523 10:18:51.101140  2600 net.cpp:434] accuracy <- label_data_1_split_0
+I0523 10:18:51.101146  2600 net.cpp:408] accuracy -> accuracy
+I0523 10:18:51.101155  2600 net.cpp:150] Setting up accuracy
+I0523 10:18:51.101161  2600 net.cpp:157] Top shape: (1)
+I0523 10:18:51.101166  2600 net.cpp:165] Memory required for data: 2131547140
+I0523 10:18:51.101171  2600 layer_factory.hpp:77] Creating layer loss
+I0523 10:18:51.101176  2600 net.cpp:100] Creating Layer loss
+I0523 10:18:51.101181  2600 net.cpp:434] loss <- fc8_sun2_fc8_sun2_0_split_1
+I0523 10:18:51.101186  2600 net.cpp:434] loss <- label_data_1_split_1
+I0523 10:18:51.101192  2600 net.cpp:408] loss -> loss
+I0523 10:18:51.101199  2600 layer_factory.hpp:77] Creating layer loss
+I0523 10:18:51.102300  2600 net.cpp:150] Setting up loss
+I0523 10:18:51.102313  2600 net.cpp:157] Top shape: (1)
+I0523 10:18:51.102318  2600 net.cpp:160]     with loss weight 1
+I0523 10:18:51.102327  2600 net.cpp:165] Memory required for data: 2131547144
+I0523 10:18:51.102331  2600 net.cpp:226] loss needs backward computation.
+I0523 10:18:51.102337  2600 net.cpp:228] accuracy does not need backward computation.
+I0523 10:18:51.102344  2600 net.cpp:226] fc8_sun2_fc8_sun2_0_split needs backward computation.
+I0523 10:18:51.102349  2600 net.cpp:226] fc8_sun2 needs backward computation.
+I0523 10:18:51.102352  2600 net.cpp:226] drop7 needs backward computation.
+I0523 10:18:51.102356  2600 net.cpp:226] relu7 needs backward computation.
+I0523 10:18:51.102360  2600 net.cpp:226] fc7 needs backward computation.
+I0523 10:18:51.102365  2600 net.cpp:226] drop6 needs backward computation.
+I0523 10:18:51.102370  2600 net.cpp:226] relu6 needs backward computation.
+I0523 10:18:51.102373  2600 net.cpp:226] fc6 needs backward computation.
+I0523 10:18:51.102378  2600 net.cpp:226] pool5 needs backward computation.
+I0523 10:18:51.102383  2600 net.cpp:226] relu5 needs backward computation.
+I0523 10:18:51.102387  2600 net.cpp:226] conv5 needs backward computation.
+I0523 10:18:51.102391  2600 net.cpp:226] relu4 needs backward computation.
+I0523 10:18:51.102396  2600 net.cpp:226] conv4 needs backward computation.
+I0523 10:18:51.102401  2600 net.cpp:226] relu3 needs backward computation.
+I0523 10:18:51.102403  2600 net.cpp:226] conv3 needs backward computation.
+I0523 10:18:51.102408  2600 net.cpp:226] pool2 needs backward computation.
+I0523 10:18:51.102413  2600 net.cpp:226] norm2 needs backward computation.
+I0523 10:18:51.102416  2600 net.cpp:226] relu2 needs backward computation.
+I0523 10:18:51.102421  2600 net.cpp:226] conv2 needs backward computation.
+I0523 10:18:51.102425  2600 net.cpp:226] pool1 needs backward computation.
+I0523 10:18:51.102429  2600 net.cpp:226] norm1 needs backward computation.
+I0523 10:18:51.102433  2600 net.cpp:226] relu1 needs backward computation.
+I0523 10:18:51.102437  2600 net.cpp:226] conv1 needs backward computation.
+I0523 10:18:51.102442  2600 net.cpp:228] label_data_1_split does not need backward computation.
+I0523 10:18:51.102447  2600 net.cpp:228] data does not need backward computation.
+I0523 10:18:51.102452  2600 net.cpp:270] This network produces output accuracy
+I0523 10:18:51.102457  2600 net.cpp:270] This network produces output loss
+I0523 10:18:51.102469  2600 net.cpp:283] Network initialization done.
+I0523 10:18:51.102548  2600 solver.cpp:60] Solver scaffolding done.
+I0523 10:18:51.102972  2600 caffe.cpp:155] Finetuning from /media/wangkeze/ASPL/caffe-master/deepal/webface_svm/snapshot/_current.caffemodel
+I0523 10:18:53.036782  2600 caffe.cpp:251] Starting Optimization
+I0523 10:18:53.036805  2600 solver.cpp:279] Solving AlexNet
+I0523 10:18:53.036810  2600 solver.cpp:280] Learning Rate Policy: step
+I0523 10:18:53.040266  2600 solver.cpp:337] Iteration 0, Testing net (#0)
+I0523 10:18:53.602820  2600 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0523 10:18:54.830785  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:18:56.263993  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:18:57.420370  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:18:58.638672  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:18:59.691020  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:00.987022  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:02.367163  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:03.493029  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:04.702450  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:05.842469  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:07.008762  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:08.648537  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:10.448359  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:11.820969  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:13.243168  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:14.499614  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:19.370007  2600 solver.cpp:412]     Test net output #0: accuracy = 0.753934
+I0523 10:19:19.370086  2600 solver.cpp:412]     Test net output #1: loss = 1.57773 (* 1 = 1.57773 loss)
+I0523 10:19:19.446990  2600 solver.cpp:228] Iteration 0, loss = 0.236994
+I0523 10:19:19.447037  2600 solver.cpp:244]     Train net output #0: loss = 0.236994 (* 1 = 0.236994 loss)
+I0523 10:19:19.447082  2600 sgd_solver.cpp:106] Iteration 0, lr = 0.0001
+I0523 10:19:24.107954  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:25.366132  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:26.496090  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:27.729840  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:28.979786  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:30.087432  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:31.321872  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:32.588346  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:33.836822  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:35.075211  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:36.280927  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:37.430565  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:38.667644  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:39.829386  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:41.039176  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:42.282769  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:43.536747  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:44.774504  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:45.962556  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:47.127284  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:48.351728  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:49.602556  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:50.791944  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:52.031057  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:53.284912  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:54.528411  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:55.727463  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:56.878118  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:58.118675  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:19:59.376899  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:00.627046  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:01.851815  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:03.122920  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:04.370003  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:05.569166  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:06.705679  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:07.935928  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:09.239204  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:10.475965  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:11.709905  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:12.821741  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:14.228510  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:15.437337  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:16.578905  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:17.808583  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:19.076927  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:20.323537  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:21.557585  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:22.673507  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:23.889762  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:25.159098  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:26.293236  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:27.523843  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:28.772908  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:30.017431  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:31.274984  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:32.444353  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:33.637660  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:34.897816  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:36.151542  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:37.235635  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:38.469408  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:39.731961  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:40.982046  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:42.154731  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:43.318315  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:44.550784  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:45.797670  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:47.041301  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:48.116863  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:49.378443  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:50.602612  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:51.756242  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:52.921171  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:54.157552  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:55.416826  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:56.654304  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:57.832913  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:20:58.979082  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:00.338779  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:01.485980  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:02.674764  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:03.913381  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:05.159924  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:06.389477  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:07.591202  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:08.730648  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:10.502202  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:11.998600  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:13.523829  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:14.999639  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:16.493628  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:18.098132  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:19.548820  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:21.264334  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:22.754926  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:24.311309  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:25.775584  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:27.471442  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:29.050392  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:30.638056  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:30.721153  2600 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0523 10:21:32.208097  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:33.844462  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:35.426126  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:36.937758  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:38.457767  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:40.157974  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:41.669571  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:43.253451  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:45.017684  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:46.581030  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:48.219195  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:49.815371  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:51.291810  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:52.651705  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:53.987622  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:55.343598  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:56.826092  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:58.192275  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:21:59.533836  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:00.858166  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:02.268959  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:03.699379  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:05.079943  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:06.636801  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:08.060122  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:09.493170  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:10.756260  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:12.041278  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:13.446938  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:14.849951  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:16.238603  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:17.646052  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:18.950037  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:20.361914  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:21.928730  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:23.435201  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:24.781198  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:26.115903  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:27.478773  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:28.894769  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:30.093040  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:31.456954  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:32.813287  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:34.098767  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:35.533174  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:36.923408  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:38.284651  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:39.680428  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:40.979182  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:42.426579  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:43.853360  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:45.304549  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:46.685740  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:48.074671  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:49.499652  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:50.893548  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:52.278285  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:53.714776  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:55.096103  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:56.487653  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:57.968438  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:22:59.385010  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:00.828387  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:02.279642  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:03.901574  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:05.351827  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:06.802191  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:08.324533  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:09.986246  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:11.547682  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:13.180605  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:14.772159  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:16.297698  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:17.938410  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:19.463176  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:21.033780  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:22.700569  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:24.132638  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:23:25.509332  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:13.733458  2600 solver.cpp:337] Iteration 10000, Testing net (#0)
+I0523 10:41:15.612206  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:16.798370  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:17.794242  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:18.922770  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:20.071249  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:21.149255  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:22.326990  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:23.532177  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:24.611227  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:25.662252  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:26.734449  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:27.870868  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:29.060770  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:30.085821  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:31.242136  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:32.381397  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:33.501538  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:34.653151  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:35.662045  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:36.778188  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:37.822494  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:39.049237  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:40.115747  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:41.249296  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:42.418912  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:43.532727  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:44.596297  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:45.763501  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:46.989768  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:48.098203  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:49.104506  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:50.244655  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:41:50.389981  2600 solver.cpp:412]     Test net output #0: accuracy = 0.752923
+I0523 10:41:50.431735  2600 solver.cpp:412]     Test net output #1: loss = 1.44777 (* 1 = 1.44777 loss)
+I0523 10:41:50.487056  2600 solver.cpp:228] Iteration 10000, loss = 0.0439733
+I0523 10:41:50.487100  2600 solver.cpp:244]     Train net output #0: loss = 0.0439735 (* 1 = 0.0439735 loss)
+I0523 10:41:50.487112  2600 sgd_solver.cpp:106] Iteration 10000, lr = 0.0001
+I0523 10:42:01.871143  2610 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:25.747273  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:26.250169  2600 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0523 10:42:47.813107  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:49.067690  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:50.298207  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:51.448787  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:52.621000  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:53.843461  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:55.093789  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:56.359539  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:57.604565  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:58.753978  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:42:59.997289  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:01.163512  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:02.332171  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:03.838980  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:14.281426  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:15.689817  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:17.145104  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:18.527272  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:19.902401  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:21.363068  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:22.738703  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:24.128029  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:25.580663  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:26.982462  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:28.411772  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:29.863423  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:31.303861  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:32.743502  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:34.140812  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:35.430513  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:36.740156  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:37.980111  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:39.335005  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:45.779641  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:47.108032  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:48.389012  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:49.660856  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:43:51.056432  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:44:19.362043  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:44:20.869871  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:44:22.257016  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:44:23.625107  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:44:44.158906  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:44:54.495334  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:40.849844  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:42.520905  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:44.317492  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:45.885866  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:47.432706  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:48.924362  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:50.282794  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:51.732518  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:53.088660  2608 blocking_queue.cpp:50] Waiting for data
+I0523 10:45:54.441579  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:03:42.451905  2600 solver.cpp:462] Snapshotting to binary proto file webface_aspl_iter_20000.caffemodel
+I0523 11:03:47.283655  2600 sgd_solver.cpp:273] Snapshotting solver state to binary proto file webface_aspl_iter_20000.solverstate
+I0523 11:03:48.653482  2600 solver.cpp:337] Iteration 20000, Testing net (#0)
+I0523 11:03:51.058995  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:03:52.328470  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:03:53.457614  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:03:54.521656  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:03:55.686496  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:03:56.858207  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:03:57.987923  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:03:59.243805  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:00.240798  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:01.417882  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:02.503545  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:03.618998  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:04.794809  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:05.804972  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:07.077692  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:08.148959  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:09.280335  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:10.411253  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:11.421087  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:12.767854  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:13.911716  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:15.051267  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:16.121387  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:17.311147  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:18.470854  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:19.556499  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:20.626065  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:21.805126  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:22.987571  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:24.057809  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:25.175882  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:26.251797  2600 solver.cpp:412]     Test net output #0: accuracy = 0.753497
+I0523 11:04:26.254724  2600 solver.cpp:412]     Test net output #1: loss = 1.50431 (* 1 = 1.50431 loss)
+I0523 11:04:26.299517  2600 solver.cpp:228] Iteration 20000, loss = 0.0185933
+I0523 11:04:26.299561  2600 solver.cpp:244]     Train net output #0: loss = 0.0185936 (* 1 = 0.0185936 loss)
+I0523 11:04:26.299571  2600 sgd_solver.cpp:106] Iteration 20000, lr = 0.0001
+I0523 11:04:26.803305  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:04:39.365075  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:02.350241  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:03.549890  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:04.683142  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:05.978124  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:07.126471  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:08.350422  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:09.617461  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:10.872761  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:12.099982  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:13.290621  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:14.419461  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:15.684574  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:17.224963  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:18.694984  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:20.107460  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:21.332928  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:30.033200  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:31.204589  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:32.564968  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:33.951308  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:35.394471  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:36.870932  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:38.289260  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:39.789963  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:41.161509  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:42.509291  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:43.979022  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:45.393824  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:46.829316  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:48.266801  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:49.644537  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:50.821255  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:51.745113  2600 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0523 11:05:52.189843  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:53.438124  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:54.714200  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:56.042131  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:57.431690  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:05:58.651335  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:05.038327  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:06.384433  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:07.726897  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:08.978216  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:10.367861  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:21.626361  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:22.985219  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:24.379318  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:25.793823  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:27.124753  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:28.419824  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:29.720190  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:31.196120  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:32.646864  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:33.822502  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:34.983047  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:06:36.336644  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:09.320981  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:10.728615  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:11.899304  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:13.461827  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:15.104988  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:16.630319  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:19.404333  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:20.803895  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:54.927012  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:56.417639  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:07:58.253631  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:26.551718  2600 solver.cpp:337] Iteration 30000, Testing net (#0)
+I0523 11:26:28.269714  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:29.445350  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:30.667042  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:31.662412  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:32.814544  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:33.956367  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:35.074025  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:36.330415  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:37.334725  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:38.470314  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:39.531934  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:40.634224  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:41.770987  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:42.775588  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:43.977069  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:45.067924  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:46.188104  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:47.323292  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:48.328472  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:49.472204  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:50.596395  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:51.755959  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:52.798897  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:53.994002  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:55.163533  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:56.235481  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:57.314631  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:58.515311  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:26:59.713529  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:00.776211  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:01.872126  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:02.991705  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:03.364938  2600 solver.cpp:412]     Test net output #0: accuracy = 0.756638
+I0523 11:27:03.366099  2600 solver.cpp:412]     Test net output #1: loss = 1.50808 (* 1 = 1.50808 loss)
+I0523 11:27:03.408531  2600 solver.cpp:228] Iteration 30000, loss = 0.0230588
+I0523 11:27:03.408572  2600 solver.cpp:244]     Train net output #0: loss = 0.023059 (* 1 = 0.023059 loss)
+I0523 11:27:03.408586  2600 sgd_solver.cpp:106] Iteration 30000, lr = 0.0001
+I0523 11:27:13.196892  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:40.766705  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:42.368487  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:44.044067  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:45.697450  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:47.294826  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:48.905042  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:50.621008  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:52.404378  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:54.044718  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:55.668625  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:57.312870  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:27:59.263128  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:01.470481  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:03.331034  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:04.958863  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:06.478582  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:26.984644  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:28.547251  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:29.865312  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:31.202436  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:32.857957  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:34.443465  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:35.960281  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:37.194834  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:38.529573  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:39.808318  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:41.049687  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:42.306839  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:43.554817  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:44.716567  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:45.878092  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:47.158535  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:48.319638  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:49.527446  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:50.793972  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:52.052265  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:53.305718  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:54.568234  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:55.896747  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:57.186627  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:58.420825  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:28:59.608489  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:00.773141  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:02.020838  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:05.147058  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:06.625995  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:09.031332  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:10.799206  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:12.210813  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:13.756608  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:15.165251  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:17.836354  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:20.647104  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:21.134968  2600 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0523 11:29:22.319425  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:53.894385  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:55.132959  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:56.545138  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:29:57.949270  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:11.319021  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:12.774052  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:27.820781  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:29.257974  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:30.747511  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:32.372881  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:33.777158  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:39.807206  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:30:41.507416  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:48:50.808027  2600 solver.cpp:462] Snapshotting to binary proto file webface_aspl_iter_40000.caffemodel
+I0523 11:48:55.222296  2600 sgd_solver.cpp:273] Snapshotting solver state to binary proto file webface_aspl_iter_40000.solverstate
+I0523 11:48:57.772130  2600 solver.cpp:337] Iteration 40000, Testing net (#0)
+I0523 11:48:59.006340  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:00.193720  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:01.185811  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:02.322149  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:03.492831  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:04.605510  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:05.751822  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:06.981925  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:08.018362  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:09.106930  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:10.155282  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:11.284657  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:12.479787  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:13.486094  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:14.668529  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:15.956710  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:17.077854  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:18.224174  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:19.229693  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:20.373314  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:21.389806  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:22.625764  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:23.652120  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:24.798591  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:25.964027  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:27.098323  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:28.169719  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:29.309990  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:30.530544  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:31.634555  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:32.643857  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:33.807476  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:34.716838  2600 solver.cpp:412]     Test net output #0: accuracy = 0.754535
+I0523 11:49:34.717484  2600 solver.cpp:412]     Test net output #1: loss = 1.52371 (* 1 = 1.52371 loss)
+I0523 11:49:34.763310  2600 solver.cpp:228] Iteration 40000, loss = 0.0360069
+I0523 11:49:34.763353  2600 solver.cpp:244]     Train net output #0: loss = 0.0360072 (* 1 = 0.0360072 loss)
+I0523 11:49:34.763362  2600 sgd_solver.cpp:106] Iteration 40000, lr = 0.0001
+I0523 11:49:37.731858  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:49:50.931710  2610 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:12.799600  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:14.384292  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:15.883994  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:17.152546  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:18.448588  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:19.779453  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:21.170375  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:22.401645  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:23.905879  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:25.434015  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:26.723247  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:28.093217  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:29.646329  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:31.167927  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:32.782290  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:34.187371  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:35.484438  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:36.732880  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:37.995527  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:39.252102  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:40.567595  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:41.866447  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:43.094090  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:44.394083  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:45.608613  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:46.841226  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:48.176066  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:49.637507  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:51.006598  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:52.412222  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:53.534363  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:50:58.839761  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:00.447445  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:06.757423  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:08.401756  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:09.818068  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:33.976284  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:35.344388  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:48.465725  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:49.674125  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:50.908211  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:52.174190  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:53.401226  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:51:54.584619  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:52:55.319481  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:52:57.014070  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:52:58.533421  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:53:00.214714  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:53:01.592375  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:53:07.639030  2608 blocking_queue.cpp:50] Waiting for data
+I0523 11:53:09.420331  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:42.349512  2600 solver.cpp:337] Iteration 50000, Testing net (#0)
+I0523 12:11:43.815553  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:44.962723  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:46.100402  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:47.155774  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:48.238690  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:49.418033  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:50.599561  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:51.809140  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:52.819332  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:53.962028  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:55.095759  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:56.157846  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:57.331327  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:58.415062  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:11:59.610579  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:00.623522  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:01.825889  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:02.898308  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:03.921926  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:05.058271  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:06.223433  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:07.390794  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:08.550298  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:09.683759  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:10.822654  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:11.913142  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:13.072862  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:14.218744  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:15.356668  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:16.408154  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:17.562542  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:18.717270  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:19.019335  2600 solver.cpp:412]     Test net output #0: accuracy = 0.755846
+I0523 12:12:19.022765  2600 solver.cpp:412]     Test net output #1: loss = 1.51305 (* 1 = 1.51305 loss)
+I0523 12:12:19.069257  2600 solver.cpp:228] Iteration 50000, loss = 0.0122542
+I0523 12:12:19.069310  2600 solver.cpp:244]     Train net output #0: loss = 0.0122546 (* 1 = 0.0122546 loss)
+I0523 12:12:19.069321  2600 sgd_solver.cpp:106] Iteration 50000, lr = 0.0001
+I0523 12:12:28.398654  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:47.266958  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:57.435204  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:58.784312  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:12:59.928270  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:01.207665  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:02.579591  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:03.788465  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:05.256155  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:05.737730  2600 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0523 12:13:06.704458  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:08.787927  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:10.114639  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:11.466712  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:12.810256  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:14.100026  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:15.505686  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:16.978168  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:18.304147  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:19.761098  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:21.903532  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:23.539701  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:35.464414  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:37.110770  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:38.711406  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:40.132688  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:41.529592  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:47.542426  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:13:59.877558  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:01.498734  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:14.764729  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:16.440728  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:17.917021  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:19.339829  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:20.499961  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:21.760097  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:23.088239  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:24.411314  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:25.590307  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:27.160663  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:28.577013  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:29.879848  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:31.453048  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:33.264761  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:34.788132  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:36.257498  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:37.598472  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:38.781352  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:14:39.963737  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:34:26.831060  2600 solver.cpp:462] Snapshotting to binary proto file webface_aspl_iter_60000.caffemodel
+I0523 12:34:49.210445  2600 sgd_solver.cpp:273] Snapshotting solver state to binary proto file webface_aspl_iter_60000.solverstate
+I0523 12:34:50.661308  2600 solver.cpp:337] Iteration 60000, Testing net (#0)
+I0523 12:34:51.666779  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:34:52.839524  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:34:55.122092  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:34:56.682327  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:34:57.817142  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:34:58.974972  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:00.134829  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:01.355824  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:02.360321  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:03.509608  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:04.641561  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:05.693171  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:06.845875  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:07.922518  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:09.162668  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:10.154359  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:11.289960  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:12.453059  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:13.475033  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:14.607084  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:15.749318  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:16.893025  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:18.018620  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:19.155609  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:20.305366  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:21.419356  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:22.545719  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:23.689242  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:24.840232  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:25.904893  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:27.039501  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:28.184265  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:28.998525  2600 solver.cpp:412]     Test net output #0: accuracy = 0.757976
+I0523 12:35:28.999189  2600 solver.cpp:412]     Test net output #1: loss = 1.51822 (* 1 = 1.51822 loss)
+I0523 12:35:29.040712  2600 solver.cpp:228] Iteration 60000, loss = 0.00706958
+I0523 12:35:29.040751  2600 solver.cpp:244]     Train net output #0: loss = 0.00706994 (* 1 = 0.00706994 loss)
+I0523 12:35:29.040763  2600 sgd_solver.cpp:106] Iteration 60000, lr = 1e-05
+I0523 12:35:33.321584  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:35:46.656735  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:36:08.107033  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:36:18.622506  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:36:20.355100  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:36:21.998586  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:36:23.611135  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:36:25.268522  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:36:31.744402  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:14.671078  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:16.249265  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:17.518883  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:18.847430  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:20.176833  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:21.644711  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:22.895462  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:24.198782  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:25.392527  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:26.632107  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:27.886409  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:29.093367  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:30.332051  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:31.612941  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:32.881342  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:34.106043  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:35.230862  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:36.443681  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:37.693848  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:38.999511  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:40.372947  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:41.617450  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:42.930558  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:44.316587  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:45.682339  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:46.894878  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:37:48.113545  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:38:22.908489  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:38:24.967978  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:35.024826  2600 solver.cpp:337] Iteration 70000, Testing net (#0)
+I0523 12:57:36.493105  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:37.550479  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:38.710582  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:39.883159  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:40.961665  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:42.152359  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:43.404922  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:44.454886  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:45.529937  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:46.639163  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:47.842967  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:49.077538  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:50.281666  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:51.516907  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:52.707072  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:53.887567  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:55.074111  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:56.140918  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:57.301499  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:58.471401  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:57:59.621284  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:00.882853  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:02.099190  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:03.278726  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:04.514467  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:05.710244  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:05.860399  2600 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0523 12:58:06.945758  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:08.118607  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:09.269619  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:10.477284  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:11.710350  2610 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:12.261160  2600 solver.cpp:412]     Test net output #0: accuracy = 0.763248
+I0523 12:58:12.263370  2600 solver.cpp:412]     Test net output #1: loss = 1.51501 (* 1 = 1.51501 loss)
+I0523 12:58:12.305125  2600 solver.cpp:228] Iteration 70000, loss = 0.00670749
+I0523 12:58:12.305164  2600 solver.cpp:244]     Train net output #0: loss = 0.0067078 (* 1 = 0.0067078 loss)
+I0523 12:58:12.305178  2600 sgd_solver.cpp:106] Iteration 70000, lr = 1e-05
+I0523 12:58:19.689919  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:35.682371  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:49.165565  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:50.888890  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:52.369823  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:58:53.731758  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:05.170634  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:06.407953  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:07.810670  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:09.133478  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:10.402880  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:14.243530  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:15.539712  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:16.998643  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:18.467224  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:19.871965  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:21.185466  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:22.457716  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:23.785059  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:25.110025  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:26.693184  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:28.277204  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:29.624161  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:56.101826  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:57.553616  2608 blocking_queue.cpp:50] Waiting for data
+I0523 12:59:59.092804  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:00.599218  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:01.783061  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:03.023442  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:04.424443  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:05.799800  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:07.072661  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:08.427393  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:09.704620  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:10.977895  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:12.220386  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:13.438002  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:14.564209  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:15.797518  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:17.152063  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:18.490051  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:19.623281  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:20.867853  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:22.126044  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:23.601291  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:24.987840  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:29.646100  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:00:43.419528  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:01:32.745496  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:01:34.199479  2608 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:14.567104  2600 solver.cpp:462] Snapshotting to binary proto file webface_aspl_iter_80000.caffemodel
+I0523 13:20:37.749384  2600 sgd_solver.cpp:273] Snapshotting solver state to binary proto file webface_aspl_iter_80000.solverstate
+I0523 13:20:38.217056  2600 solver.cpp:317] Iteration 80000, loss = 0.0162025
+I0523 13:20:38.217098  2600 solver.cpp:337] Iteration 80000, Testing net (#0)
+I0523 13:20:40.199017  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:41.390493  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:42.443501  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:43.543684  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:44.747241  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:46.220836  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:47.538907  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:48.528271  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:49.667953  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:50.822506  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:51.867879  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:53.033499  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:54.129452  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:55.324710  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:56.332898  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:57.497845  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:58.576756  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:20:59.582828  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:00.716140  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:01.860859  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:03.014366  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:04.150985  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:05.279441  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:06.421998  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:07.522290  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:08.648448  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:09.816018  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:10.964296  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:12.011052  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:13.151727  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:14.316195  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:15.439883  2610 blocking_queue.cpp:50] Waiting for data
+I0523 13:21:15.542156  2600 solver.cpp:412]     Test net output #0: accuracy = 0.764259
+I0523 13:21:15.542805  2600 solver.cpp:412]     Test net output #1: loss = 1.52019 (* 1 = 1.52019 loss)
+I0523 13:21:15.542814  2600 solver.cpp:322] Optimization Done.
+I0523 13:21:15.543566  2600 caffe.cpp:254] Optimization Done.
+*** Aborted at 1495516877 (unix time) try "date -d @1495516877" if you are using GNU date ***
+PC: @     0x7f861c7d1280 (unknown)
+*** SIGSEGV (@0x0) received by PID 2600 (TID 0x7f861d69c800) from PID 0; stack trace: ***
+    @     0x7f861b59fcb0 (unknown)
+    @     0x7f861c7d1280 (unknown)
+    @     0x7f861c7d18f7 (unknown)
+    @     0x7f861b5a553a (unknown)
+    @     0x7f861cb39d73 (unknown)

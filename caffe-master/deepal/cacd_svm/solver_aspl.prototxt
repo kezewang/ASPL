@@ -1,0 +1,14 @@
+net: "/media/wangkeze/ASPL/caffe-master/deepal/cacd_svm/train_val_aspl.prototxt"
+test_iter: 179
+test_interval: 5000
+base_lr: 0.001
+lr_policy: "step"
+gamma: 0.1
+stepsize: 15000
+display: 100
+max_iter: 40000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 20000
+snapshot_prefix: "cacd_aspl"
+solver_mode: GPU

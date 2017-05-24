@@ -1,0 +1,12 @@
+train_id_path:/media/wangkeze/ASPL/datasets/webface/Partitions/train_rest.txt
+train_fea_path:/media/wangkeze/ASPL/caffe-master/deepal/webface_svm/train_features.txt
+init_id_path:/media/wangkeze/ASPL/datasets/webface/Partitions/train_init.txt
+init_fea_path:/media/wangkeze/ASPL/caffe-master/deepal/webface_svm/init_features.txt
+test_id_path:/media/wangkeze/ASPL/datasets/webface/Partitions/test.txt
+test_fea_path:/media/wangkeze/ASPL/caffe-master/deepal/webface_svm/test_features.txt
+finetune_id_path:/media/wangkeze/ASPL/caffe-master/deepal/webface_svm/finetune.txt
+finetune_script_path:/media/wangkeze/ASPL/caffe-master/deepal/webface_svm/finetune_aspl.sh
+get_features_script_path:/media/wangkeze/ASPL/caffe-master/deepal/webface_svm/get_webface_features.sh
+fea_dim:4096
+al_select_per_iter:5000
+all_select_num:40000
