@@ -1,7 +1,8 @@
-Active Self-Paced Learning for Cost-Effective and Progressive Face Identification (ASPL)
-----------------------
+Active Self-Paced Learning for Cost-Effective and Progressive Face Identification (ASPL) from Keze Wang's research projects: http://hcp.sysu.edu.cn/active-self-paced-learning-for-cost-effective-and-progressive-face-identification/
 
-The source code is for educational and research use only without any warranty; if you use any part of the source code, please cite related paper:
+-----------------------------------------------------------------------------------------------------------------------------
+The source code is for educational and research use only without any warranty.
+if you use any part of the source code, please cite related paper:
 Liang Lin, Keze Wang, Deyu Meng, Wangmeng Zuo, and Lei Zhang, "Active Self-Paced Learning for Cost-Effective and Progressive Face Identification", IEEE Transactions on Pattern Analysis and Machine Intelligence (T-PAMI), DOI: 10.1109/TPAMI.2017.2652459, 2017.
 
 If you have any question about the code, please email kezewang@gmail.com
