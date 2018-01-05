@@ -15,6 +15,6 @@ Please reference the following steps to run the code.
 
 0) Set up the caffe with OpenCV3.0 according to http://caffe.berkeleyvision.org/install_apt.html
 
-1) Download the CACD dataset (http://bcsiriuschen.github.io/CARC/, you can download our verison through http:www.sysu-hcp.net/wp-content/uploads/2017/05/cacd.zip) and CASIA-WebFace dataset (http://www.cbsr.ia.ac.cn/english/CASIA-WebFace-Database.html). The image data should be placed in ASPL/datasets/cacd and ASPL/datasets/webface
+1) Download the CACD dataset (http://bcsiriuschen.github.io/CARC/, you can download our verison through http://www.sysu-hcp.net/wp-content/uploads/2017/05/cacd.zip) and CASIA-WebFace dataset (http://www.cbsr.ia.ac.cn/english/CASIA-WebFace-Database.html). The image data should be placed in ASPL/datasets/cacd and ASPL/datasets/webface
 
 2) Modify the absolute path in ASPL/src/config/config_cacd.txt, ASPL/src/config/config_webface.txt and ASPL/src/make_run.sh to run the ASPL learning framework.
