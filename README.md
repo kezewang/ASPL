@@ -21,4 +21,4 @@ Please reference the following steps to run the code.
 
 
 Acknowledgements
-We would like to deeply thank Depeng Liang for their preliminary contributions on this project!
+We would like to deeply thank <a href="https://githuber.cn/people/2424744">Depeng Liang</a> for their preliminary contributions on this project!
