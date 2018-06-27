@@ -20,5 +20,5 @@ Please reference the following steps to run the code.
 2) Modify the absolute path in ASPL/src/config/config_cacd.txt, ASPL/src/config/config_webface.txt and ASPL/src/make_run.sh to run the ASPL learning framework.
 
 
-Acknowledgements
+<p><strong>Acknowledgements</strong></p>
 We would like to deeply thank <a href="https://githuber.cn/people/2424744">Depeng Liang</a> for their preliminary contributions on this project!
